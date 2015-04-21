@@ -1,5 +1,5 @@
 class InputParser
-	attr_accessor :input
+	attr_reader :input
 
 	ROMANS = ['I', 'V', 'X', 'L', 'C', 'D', 'M']
 
