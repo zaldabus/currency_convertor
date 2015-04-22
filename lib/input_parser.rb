@@ -1,6 +1,8 @@
 class InputParser
 	attr_reader :input
 
+	SEPERATOR = ' is '
+
 	ROMANS = ['I', 'V', 'X', 'L', 'C', 'D', 'M']
 
 	def initialize(text_input)
@@ -12,24 +14,36 @@ class InputParser
 	# by one of the following three methods
 
 	def romans
-		@input.select do |line|
+		lines = input.select do |line|
 			ROMANS.any? { |roman| line.include? roman }
 		end.reject do |line|
-			currencies.include? line
+			currencies.include? line.split(SEPERATOR)
 		end.reject do |line|
-			questions.include? line
+			questions.include? line.split(SEPERATOR)
 		end
+
+		seperate(lines)
 	end
 
 	def currencies
-		@input.select do |line|
+		lines = input.select do |line|
 			line.match(/\d/)
 		end
+
+		seperate(lines)
 	end
 
 	def questions
-		@input.select do |line|
+		lines = input.select do |line|
 			line.include? '?'
+		end
+
+		seperate(lines)
+	end
+
+	def seperate(lines)
+		lines.map do |line|
+			line.split(SEPERATOR)
 		end
 	end
 end
