@@ -5,6 +5,8 @@ class InputParser
 
 	ROMANS = ['I', 'V', 'X', 'L', 'C', 'D', 'M']
 
+	INVALID_INPUT_RETURN = ['I have no idea what you are talking about']
+
 	def initialize(text_input)
 		@input =	File.readlines(text_input).map(&:chomp)
 	end
@@ -36,14 +38,16 @@ class InputParser
 	def questions
 		lines = input.select do |line|
 			line.include? '?'
-		end
+		end.map { |line| line.gsub(' ?', '')}
 
 		seperate(lines)
 	end
 
+	private
 	def seperate(lines)
 		lines.map do |line|
-			line.split(SEPERATOR)
+			seperated_line = line.split(SEPERATOR)
+			seperated_line.size == 2 ? seperated_line : INVALID_INPUT_RETURN
 		end
 	end
 end

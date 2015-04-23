@@ -15,6 +15,15 @@ class CurrencyMap
 		currency_convertor[key] = value
 	end
 
+	def keys
+		currency_convertor.keys
+	end
+
+	def currency_key(input)
+		currency = currency(input)
+		simple_singularize(currency).downcase.to_sym
+	end
+
 	private
 	def create_mapping(currency_inputs)
 		new_currencies = {}
@@ -35,25 +44,7 @@ class CurrencyMap
 		# value_to_determine never gets bigger than 4
 		# (3 of the same type and 1 different)
 		convert_to_romans = input.split(' ')[0...-1]
-
-		value_to_determine = ''
-		total = 0
-
-		convert_to_romans.each_with_index do |unknown_value, i|
-			roman_value = roman_convertor.value_map(unknown_value)
-			value_to_determine << roman_value
-
-			next if convert_to_romans.size > 1 && i == 0
-
-			if i > 0 && i < (convert_to_romans.size - 1) && convert_to_romans[i - 1] == unknown_value
-				next
-			else
-				total += roman_convertor.roman_compound_value(value_to_determine)
-				value_to_determine = ''
-			end
-		end
-
-		total
+		roman_convertor.convert_foreign_values_to_integer(convert_to_romans)
 	end
 
 	def calculate_output_value(output)
@@ -64,11 +55,6 @@ class CurrencyMap
 		exchange_rate = (credit_value / key_value)
 		currency_map[currency_key(key_ref)] = exchange_rate
 		currency_map
-	end
-
-	def currency_key(input)
-		currency = currency(input)
-		simple_singularize(currency).downcase.to_sym
 	end
 
 	def currency(input)
