@@ -1,7 +1,7 @@
 = Currency Convertor
 
 A simple application that takes in a number of inputs giving
-the values of *foreign* roman numerals, currency conversions,
+the values of 'foreign' roman numerals, currency conversions,
 and questions to be answered based off of the given information.
 
 == Assumptions
@@ -14,7 +14,7 @@ This application makes a few assumptions about the input:
 
 3. Currency mapping will include a currency value that maps to a 'Credits' value with foreign Roman Numerals.
 
-4. Questions will include either *how much* or *how many*. If no currency is indicated, it will return the integer value of the foreign Roman Numerals.
+4. Questions will include either 'how much' or 'how many'. If no currency is indicated, it will return the integer value of the foreign Roman Numerals.
 
 == Usage
 
