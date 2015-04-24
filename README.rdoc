@@ -1,10 +1,10 @@
-== Currency Convertor
+= Currency Convertor
 
 A simple application that takes in a number of inputs giving
 the values of 'foreign' roman numerals, currency conversions,
 and questions to be answered based off of the given information.
 
-= Usage
+== Usage
 
 To use this application, run it from a command line interface.
 In addition to executing the 'merchants_guide_to_the_galaxy'
