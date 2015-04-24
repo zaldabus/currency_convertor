@@ -6,20 +6,15 @@ and questions to be answered based off of the given information.
 
 == Assumptions
 
-This application makes a few assumptions about the input
+This application makes a few assumptions about the input:
 
-1. All input will use the phrase ' is ' to indicate what
-needs to be mapped to what (left side mapped to right).
+1. All input will use the phrase ' is ' to indicate what needs to be mapped to what (left side mapped to right).
 
-2. Roman Numeral mapping will be a simple mapping with
-one unkown word mapping directly to a Roman Numeral
+2. Roman Numeral mapping will be a simple mapping with one unkown word mapping directly to a Roman Numeral.
 
-3. Currency mapping will include a currency value that
-maps to a 'Credits' value with foreign Roman Numerals
+3. Currency mapping will include a currency value that maps to a 'Credits' value with foreign Roman Numerals.
 
-4. Questions will include either *how much* or *how many*.
-If no currency is indicated, it will return the integer value
-of the foreign Roman Numerals
+4. Questions will include either *how much* or *how many*. If no currency is indicated, it will return the integer value of the foreign Roman Numerals.
 
 == Usage
 
