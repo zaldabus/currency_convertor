@@ -32,12 +32,8 @@ describe InputParser do
 		end
 
 		it 'does not include any roman mappings or currency mappings' do
-		expect(input.questions).to_not include(['glob', 'I'])
-		expect(input.questions).to_not include(['glob glob Silver', '34 Credits'])
-		end
-
-		it 'returns an invalid input message when a line does not use the seperator' do
-			expect(input.questions).to include(InputParser::INVALID_INPUT_RETURN)
+			expect(input.questions).to_not include(['glob', 'I'])
+			expect(input.questions).to_not include(['glob glob Silver', '34 Credits'])
 		end
 	end
 end

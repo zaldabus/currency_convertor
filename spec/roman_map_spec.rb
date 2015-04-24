@@ -33,9 +33,23 @@ describe RomanConvertor do
 				expect(roman_convertor.convert_foreign_values_to_integer(['pish', 'tegj', 'prok', 'glob', 'glob', 'glob'])).to eq(48)
 			end
 		end
+	end
 
-		context 'raises an error when an invalid roman value combination is passed' do
+	describe '#invalid_foreign_combination?' do
+		it 'returns false for valid combinations' do
+			expect(roman_convertor.invalid_foreign_combination?(['glob'])).to be_falsey
+			expect(roman_convertor.invalid_foreign_combination?(['glob', 'glob'])).to be_falsey
+			expect(roman_convertor.invalid_foreign_combination?(['prok', 'glob', 'glob'])).to be_falsey
+			expect(roman_convertor.invalid_foreign_combination?(['glob', 'prok'])).to be_falsey
+		end
 
+		it 'returns true for invalid combinations' do
+			expect(roman_convertor.invalid_foreign_combination?(['blarg'])).to be_truthy
+			expect(roman_convertor.invalid_foreign_combination?(['glob', 'glob', 'glob', 'glob'])).to be_truthy
+			expect(roman_convertor.invalid_foreign_combination?(['prok', 'prok'])).to be_truthy
+			expect(roman_convertor.invalid_foreign_combination?(['glob', 'prok', 'glob'])).to be_truthy
+			expect(roman_convertor.invalid_foreign_combination?(['glob', 'prok', 'glob'])).to be_truthy
+			expect(roman_convertor.invalid_foreign_combination?(['prok', 'tegj'])).to be_truthy
 		end
 	end
 end

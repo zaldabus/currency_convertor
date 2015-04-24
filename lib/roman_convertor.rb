@@ -1,3 +1,5 @@
+require 'pry'
+
 class RomanConvertor
 	attr_accessor :roman_inputs
 
@@ -19,8 +21,22 @@ class RomanConvertor
 		roman_inputs.to_h
 	end
 
-	def value_map_access(unkown_input)
-		roman_inputs.to_h[unkown_input]
+	def value_map_access(foreign_input)
+		roman_inputs.to_h[foreign_input]
+	end
+
+	def invalid_foreign_combination?(foreign_input_array)
+		return true unless foreign_input_array.all? { |word| value_map.keys.include? word }
+
+		roman_combination = foreign_input_array.map do |foreign_word|
+			value_map_access(foreign_word)
+		end.join
+
+		return true if four_or_more_repeating_values?(roman_combination)
+		return true if repetition_of_dlv?(roman_combination)
+		return true if invalid_order?(roman_combination)
+
+		false
 	end
 
 	def convert_foreign_values_to_integer(foreign_input)
@@ -70,6 +86,55 @@ class RomanConvertor
 			roman_simple_value(individual_inputs[-1]) - roman_simple_value(individual_inputs[-2])
 		else
 			individual_inputs.inject(0) { |sum, roman| sum + roman_simple_value(roman) }
+		end
+	end
+
+	def four_or_more_repeating_values?(roman_combination)
+		roman_combination.scan(/(.)\1{3,}/).size > 0
+	end
+
+	def repetition_of_dlv?(roman_combination)
+		roman_combination
+			.gsub('I', '')
+			.gsub('X', '')
+			.gsub('C', '')
+			.gsub('M', '')
+			.scan(/(.)\1{1,}/).size > 0
+	end
+
+	def invalid_order?(roman_combination)
+		allowable_successors = {
+			'I' => { 'can_subtract_from' => ['V', 'X'], 'can_follow' => ['I'] },
+			'V' => { 'can_subtract_from' => [], 'can_follow' => ['I'] },
+			'X' => { 'can_subtract_from' => ['L', 'C'], 'can_follow' => ['V', 'I'] },
+			'L' => { 'can_subtract_from' => [], 'can_follow' => ['X', 'V', 'I'] },
+			'C' => { 'can_subtract_from' => ['D', 'M'], 'can_follow' => ['L', 'X', 'V', 'I'] },
+			'D' => { 'can_subtract_from' => [], 'can_follow' => ['C', 'L', 'X', 'V', 'I'] },
+			'M' => { 'can_subtract_from' => [], 'can_follow' => ['D', 'C', 'L', 'X', 'V', 'I'] }
+		}
+
+		i = 0
+		while i < (roman_combination.length - 1)
+			return false if i == (roman_combination.length - 1)
+
+			current_roman = roman_combination[i]
+			next_roman = roman_combination[i + 1]
+
+			if allowable_successors[current_roman]['can_subtract_from'].include? next_roman
+				return false if (i + 2) > (roman_combination.length - 1)
+				next_next_roman = roman_combination[i + 2]
+
+				if (next_next_roman == current_roman) || (next_next_roman == next_roman) ||
+					 (!(allowable_successors[current_roman]['can_follow'] - [current_roman]).include? next_next_roman)
+					return true
+				end
+
+				i += 2
+			elsif allowable_successors[current_roman]['can_follow'].include? next_roman
+				i += 1
+			else
+				return true
+			end
 		end
 	end
 end

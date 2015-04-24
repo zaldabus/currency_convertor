@@ -1,5 +1,4 @@
 require 'rspec'
-require 'roman_convertor'
 require 'currency_map'
 
 describe CurrencyMap do
@@ -11,7 +10,7 @@ describe CurrencyMap do
 		['pish pish Iron', '3910 Credits']
 	]
 
-	subject(:currency_map) { CurrencyMap.new(RomanConvertor.new(roman_inputs), currency_inputs) }
+	subject(:currency_map) { CurrencyMap.new(roman_inputs, currency_inputs) }
 
 	describe '#initialize' do
 		it 'creates a key-value map giving the conversion of each currency to all other given amounts' do

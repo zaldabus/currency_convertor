@@ -1,9 +1,11 @@
+require 'roman_convertor'
+
 class CurrencyMap
 	attr_reader :roman_convertor
 	attr_reader :currency_convertor
 
-	def initialize(roman_convertor, currency_inputs)
-		@roman_convertor = roman_convertor
+	def initialize(roman_input, currency_inputs)
+		@roman_convertor = RomanConvertor.new(roman_input)
 		@currency_convertor = create_mapping(currency_inputs)
 	end
 

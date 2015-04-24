@@ -1,4 +1,5 @@
-require 'pry'
+require 'roman_convertor'
+require 'currency_map'
 
 class QuestionParser
 	attr_reader :roman_convertor
@@ -7,15 +8,17 @@ class QuestionParser
 
 	INVALID_QUESTION_RETURN = 'I have no idea what you are talking about'
 
-	def initialize(roman_convertor, currency_map, question_inputs)
-		@roman_convertor, @currency_map, @question_inputs = roman_convertor, currency_map, question_inputs
+	def initialize(roman_input, currency_input, question_input)
+		@roman_convertor = RomanConvertor.new(roman_input)
+		@currency_map = CurrencyMap.new(roman_input, currency_input)
+		@question_inputs = question_input
 	end
 
 	def return_answers
 		answers = []
 
 		question_inputs.each do |question_input|
-			return answers << question_input if question_input.size == 1
+			return answers << INVALID_QUESTION_RETURN if question_input.size == 1
 
 			question_from, question_to = question_input[0], question_input[1]
 
@@ -38,7 +41,7 @@ class QuestionParser
 
 	private
 	def invalid_question_from?(question_from)
-		if !question_from.include?('how much') && !question_from.include?('how many')
+		unless question_from.include?('how much') || question_from.include?('how many')
 			return true
 		end
 
@@ -48,14 +51,10 @@ class QuestionParser
 	def invalid_question_to?(question_to)
 		question_to_ary = question_to.split
 
-		if !currency_map.keys.include?(currency_map.currency_key(question_to)) &&
-			 !question_to_ary[0..-1].all? { |word| roman_convertor.value_map.keys.include? word }
-			return true
-		end
-
-		if currency_map.keys.include?(currency_map.currency_key(question_to)) &&
-			 !question_to_ary[0...-1].all? { |word| roman_convertor.value_map.keys.include? word }
-			return true
+		if currency_question?(question_to)
+			return true if roman_convertor.invalid_foreign_combination?(question_to_ary[0...-1])
+		else
+			return true if roman_convertor.invalid_foreign_combination?(question_to_ary)
 		end
 
 		false
@@ -72,8 +71,6 @@ class QuestionParser
 	end
 
 	def currency_question?(question_to)
-		question_to_ary = question_to.split
-
 		if currency_map.keys.include?(currency_map.currency_key(question_to))
 			return true
 		end
