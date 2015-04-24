@@ -1,4 +1,4 @@
-require 'roman_convertor'
+require_relative 'roman_convertor'
 
 class CurrencyMap
 	attr_reader :roman_convertor
@@ -42,9 +42,6 @@ class CurrencyMap
 	end
 
 	def calculate_input_value(input)
-		# Need to put in error handling here to make sure
-		# value_to_determine never gets bigger than 4
-		# (3 of the same type and 1 different)
 		convert_to_romans = input.split(' ')[0...-1]
 		roman_convertor.convert_foreign_values_to_integer(convert_to_romans)
 	end
@@ -54,7 +51,7 @@ class CurrencyMap
 	end
 
 	def add_to_map(currency_map, key_ref, key_value, credit_value)
-		exchange_rate = (credit_value / key_value)
+		exchange_rate = (credit_value.to_f / key_value.to_f )
 		currency_map[currency_key(key_ref)] = exchange_rate
 		currency_map
 	end

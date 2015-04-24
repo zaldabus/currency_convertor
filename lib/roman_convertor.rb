@@ -1,5 +1,3 @@
-require 'pry'
-
 class RomanConvertor
 	attr_accessor :roman_inputs
 

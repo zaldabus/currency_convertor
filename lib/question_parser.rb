@@ -1,5 +1,5 @@
-require 'roman_convertor'
-require 'currency_map'
+require_relative 'roman_convertor'
+require_relative 'currency_map'
 
 class QuestionParser
 	attr_reader :roman_convertor
@@ -28,7 +28,7 @@ class QuestionParser
 				integer_for_foreign_value = find_integer(question_to)
 
 				if currency_question?(question_to)
-					credit_value = integer_for_foreign_value * currency_map[currency_map.currency_key(question_to)]
+					credit_value = (integer_for_foreign_value * currency_map[currency_map.currency_key(question_to)]).round
 					answers << "#{question_to} is #{credit_value} Credits"
 				else
 					answers << "#{question_to} is #{integer_for_foreign_value}"
