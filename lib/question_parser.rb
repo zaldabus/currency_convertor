@@ -18,18 +18,23 @@ class QuestionParser
 		answers = []
 
 		question_inputs.each do |question_input|
-			return answers << INVALID_QUESTION_RETURN if question_input.size == 1
+			if question_input.size == 1
+				answers << INVALID_QUESTION_RETURN
+				next
+			end
 
 			question_from, question_to = question_input[0], question_input[1]
 
 			if invalid_question_from?(question_from) || invalid_question_to?(question_to)
 				answers << INVALID_QUESTION_RETURN
 			else
+				integer_for_comparison_value = find_reference_integer(question_from)
 				integer_for_foreign_value = find_integer(question_to)
 
 				if currency_question?(question_to)
-					credit_value = (integer_for_foreign_value * currency_map[currency_map.currency_key(question_to)]).round
-					answers << "#{question_to} is #{credit_value} Credits"
+					currency_value = (integer_for_foreign_value * currency_map[currency_map.currency_key(question_to)] / integer_for_comparison_value).round
+					currency = question_from.split[-1]
+					answers << "#{question_to} is #{currency_value} #{currency}"
 				else
 					answers << "#{question_to} is #{integer_for_foreign_value}"
 				end
@@ -58,6 +63,16 @@ class QuestionParser
 		end
 
 		false
+	end
+
+	def find_reference_integer(question_from)
+		question_from_ary = question_from.split
+
+		if currency_map.keys.include?(currency_map.currency_key(question_from))
+			currency_map[question_from_ary[-1].downcase.to_sym]
+		else
+			1
+		end
 	end
 
 	def find_integer(question_to)

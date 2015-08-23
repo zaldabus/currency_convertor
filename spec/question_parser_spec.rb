@@ -7,7 +7,7 @@ describe QuestionParser do
 	currency_inputs = [
 		['glob glob Silver', '34 Credits'],
 		['glob prok Gold', '57800 Credits'],
-		['pish pish Iron', '3910 Credits']
+		['pish pish Iron', '3910 Credits'],
 	]
 
 	question_inputs = [
@@ -15,6 +15,7 @@ describe QuestionParser do
 		['how many Credits', 'glob prok Silver'],
 		['how many Credits', 'glob prok Gold'],
 		['how many Credits', 'glob prok Iron'],
+		['how many Silver', 'glob Gold'],
 		['I have no idea what you are talking about']
 	]
 
@@ -27,6 +28,10 @@ describe QuestionParser do
 
 		it 'returns an answer with currency for questions asking for currency' do
 			expect(question_parser.return_answers).to include('glob prok Silver is 68 Credits')
+		end
+
+		it 'returns an answer with currency converting to another currency for questions not using Credits' do
+			expect(question_parser.return_answers).to include('glob Gold is 850 Silver')
 		end
 	end
 end
